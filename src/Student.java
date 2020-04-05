@@ -28,6 +28,11 @@ public class Student{
 		return email;
 	}
 	
+	@Override
+	public String toString() {
+		return "Name:"+ name + ",eMail:" + email + ",SSN:" + ssn;
+	}
+	
 	
 }
 
