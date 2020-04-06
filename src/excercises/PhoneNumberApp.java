@@ -13,13 +13,17 @@ public class PhoneNumberApp {
 
 		String filename = "C:\\JavaTraining\\PhoneNumber.txt";
 		File file = new File(filename);
+		String[] phoneNums = new String[7];
 		String phoneNum = null;
+		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(file));
-			phoneNum = br.readLine();
+			for (int i=0; i<phoneNums.length; i++) {
+				phoneNums[i] = br.readLine();
+			}
 			br.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("Error: file not found");
+		System.out.println("Error: file not found");
 		} catch (IOException e) {
 			System.out.println("Error: Could not read file");
 		}
@@ -27,28 +31,31 @@ public class PhoneNumberApp {
 		//10 digits long
 		//Area code cannot start with 0 or 9
 		//There cannot be 911 in the phone number
-		try {
-			if (phoneNum.length() != 10) {
-				throw new TenDigitsException(phoneNum);
-			}
-			if ((phoneNum.substring(0,1).equals("0")) || (phoneNum.substring(0,1).equals("9"))){
-				throw new AreaCodeException(phoneNum);
-			}
-			for (int i = 0;i<phoneNum.length()-2;i++) {
-				if (phoneNum.substring(i,i+3).equals("911")){
-					throw new EmergencyException(phoneNum);
+		for (int iFile=0;iFile<phoneNums.length;iFile++) {
+			phoneNum = phoneNums[iFile];
+			try {
+				if (phoneNum.length() != 10) {
+					throw new TenDigitsException(phoneNum);
 				}
+				if ((phoneNum.substring(0,1).equals("0")) || (phoneNum.substring(0,1).equals("9"))){
+					throw new AreaCodeException(phoneNum);
+				}
+				for (int i = 0;i<phoneNum.length()-2;i++) {
+					if (phoneNum.substring(i,i+3).equals("911")){
+						throw new EmergencyException(phoneNum);
+					}
+				}
+				System.out.println("The number: " + phoneNum + " is a valid phone number");
+			} catch (TenDigitsException e) {
+				System.out.println("EROR:Phone number is not 10 digits");
+				System.out.println(e.toString());
+			} catch (AreaCodeException e) {
+				System.out.println("EROR:Phone number can not begin with 0 or 9");
+				System.out.println(e.toString());
+			} catch (EmergencyException e) {
+				System.out.println("EROR:Phone number can not use 911 or emergency numbers");
+				System.out.println(e.toString());
 			}
-			System.out.println(phoneNum);
-		} catch (TenDigitsException e) {
-			System.out.println("EROR:Phone number is not 10 digits");
-			System.out.println(e.toString());
-		} catch (AreaCodeException e) {
-			System.out.println("EROR:Phone number can not begin with 0 or 9");
-			System.out.println(e.toString());
-		} catch (EmergencyException e) {
-			System.out.println("EROR:Phone number can not use 911 or emergency numbers");
-			System.out.println(e.toString());
 		}
 	}
 }
